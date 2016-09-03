@@ -1,0 +1,21 @@
+{
+  "name": "vue-localstorage",
+  "version": "0.1",
+  "description": "socket.io implemantation for vuejs",
+  "main": "vue-localstorage.es2015.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinguinjkeke/vue-local-storage"
+  },
+  "keywords": [
+    "vuejs",
+    "localstorage",
+    "vue"
+  ],
+  "author": "Alexander Avakov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pinguinjkeke/vue-local-storage/issues"
+  },
+  "homepage": "https://github.com/pinguinjkeke/vue-local-storage#readme"
+}
