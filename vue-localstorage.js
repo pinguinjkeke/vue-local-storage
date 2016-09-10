@@ -58,7 +58,7 @@
                     return parseInt(value, 10);
                 case Array:
                     try {
-                        let array = JSON.parse(value);
+                        var array = JSON.parse(value);
                         return Array.isArray(array) ? array : [];
                     } catch (e) {
                         return [];
