@@ -1,10 +1,13 @@
+let ls = window.localStorage
+
 try {
-  'localStorage' in window && window['localStorage'] !== null
+  let test = '__vue-localstorage-test__'
+
+  ls.setItem(test, test)
+  ls.removeItem(test)
 } catch (e) {
   console.error('Local storage not supported by this browser')
 }
-
-let ls = window.localStorage
 
 class VueLocalStorage {
   /**

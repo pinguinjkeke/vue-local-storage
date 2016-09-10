@@ -1,6 +1,11 @@
 ;(function () {
+    var ls = window.localStorage;
+
     try {
-        'localStorage' in window && window['localStorage'] !== null;
+        var test = '__vue-localstorage-test__';
+        
+        ls.setItem(test, test);
+        ls.removeItem(test);
     } catch (e) {
         console.error('Local storage not supported by this browser');
     }
@@ -10,7 +15,7 @@
     var VueLocalStorage = {
         // Get value from localStorage
         get: function (lsKey) {
-            if (window.localStorage.hasOwnProperty(lsKey)) {
+            if (ls.hasOwnProperty(lsKey)) {
                 type = String;
 
                 for (key in VueLocalStorage._properties) {
@@ -20,7 +25,7 @@
                     }
                 }
 
-                return VueLocalStorage._process(type, window.localStorage[lsKey]);
+                return VueLocalStorage._process(type, ls[lsKey]);
             }
 
             return null;
@@ -31,18 +36,18 @@
                 type = VueLocalStorage._properties[key].type;
 
                 if ((key === lsKey) && (type === Array || type === Object)) {
-                    window.localStorage[lsKey] = JSON.stringify(value);
+                    ls[lsKey] = JSON.stringify(value);
                     return value;
                 }
             }
 
-            window.localStorage[lsKey] = value;
+            ls[lsKey] = value;
 
             return value;
         },
         // Remove from localStorage
         remove: function (lsKey) {
-            return window.localStorage.removeItem(lsKey);
+            return ls.removeItem(lsKey);
         },
         // Private function that processes the value
         _process: function (type, value) {
@@ -72,7 +77,7 @@
         _properties: {}
     };
 
-    var ls = {
+    var localStoragePlugin = {
         install: function (Vue) {
             Vue.mixin({
                 created: function () {
@@ -91,11 +96,11 @@
 
                             // Check for default value
                             if (
-                                !window.localStorage.hasOwnProperty(key) &&
+                                !ls.hasOwnProperty(key) &&
                                 this.$options.localStorage[key].hasOwnProperty('default')
                             ) {
                                 value = this.$options.localStorage[key].default;
-                                window.localStorage[key] = (type === Array || type === Object) ? JSON.stringify(value) : value;
+                                ls[key] = (type === Array || type === Object) ? JSON.stringify(value) : value;
                             }
                         }
                     }
@@ -108,12 +113,12 @@
     };
 
     if (typeof exports === 'object') {
-        module.exports = ls;
+        module.exports = localStoragePlugin;
     } else if (typeof define === 'function' && define.amd) {
         define([], function () {
-            return ls;
+            return localStoragePlugin;
         })
     } else if (window.Vue) {
-        window.VueLocalStorage = ls;
+        window.VueLocalStorage = localStoragePlugin;
     }
 })();
