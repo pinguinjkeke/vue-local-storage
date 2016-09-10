@@ -41,7 +41,7 @@ Vue.js localStorage plugin with types support
       }
     },
     methods: {
-      someMethod: {
+      someMethod () {
         let lsValue = this.$localStorage.get('someObject')
         this.$localStorage.set('someBoolean', true)
         this.$localStorage.remove('stringOne')
