@@ -2,7 +2,7 @@
   "name": "vue-localstorage",
   "version": "0.1.0",
   "description": "socket.io implemantation for vuejs",
-  "main": "vue-localstorage.es2015.js",
+  "main": "vue-localstorage.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pinguinjkeke/vue-local-storage"
