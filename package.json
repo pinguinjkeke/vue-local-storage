@@ -1,7 +1,7 @@
 {
   "name": "vue-localstorage",
   "version": "0.1.0",
-  "description": "socket.io implemantation for vuejs",
+  "description": "Vue.js localStorage plugin with types support",
   "main": "vue-localstorage.js",
   "repository": {
     "type": "git",
