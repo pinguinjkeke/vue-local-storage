@@ -36,9 +36,11 @@ class VueLocalStorage {
   /**
    * Set localStorage value
    *
+   * @param {String} lsKey
+   * @param {*} value
    * @returns {*}
    */
-  static set () {
+  static set (lsKey, value) {
     for (let key in VueLocalStorage._properties) {
       let type = VueLocalStorage._properties[key].type
 
