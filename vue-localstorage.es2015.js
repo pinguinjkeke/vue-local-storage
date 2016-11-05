@@ -109,7 +109,7 @@ export default {
   install: function (Vue) {
     Vue.mixin({
       created: function () {
-        if (this.$options.hasOwnProperty('localStorage')) {
+        if (this.$options.localStorage !== undefined) {
           // Copy all properties to _properties object
           for (let key in this.$options.localStorage) {
             if (!VueLocalStorage._properties.hasOwnProperty(key)) {
