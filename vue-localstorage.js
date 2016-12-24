@@ -109,6 +109,8 @@
                     this.$localStorage = VueLocalStorage;
                 }
             });
+
+            Vue.prototype.localStorage = VueLocalStorage;
         }
     };
 
