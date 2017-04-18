@@ -1,7 +1,7 @@
 let ls = window.localStorage
 
 try {
-  let test = '__vue-localstorage-test__'
+  const test = '__vue-localstorage-test__'
 
   ls.setItem(test, test)
   ls.removeItem(test)
@@ -42,10 +42,11 @@ class VueLocalStorage {
    */
   static set (lsKey, value) {
     for (let key in VueLocalStorage._properties) {
-      let type = VueLocalStorage._properties[key].type
+      const type = VueLocalStorage._properties[key].type
 
       if ((key === lsKey) && (type === Array || type === Object)) {
         ls[lsKey] = JSON.stringify(value)
+
         return value
       }
     }
@@ -80,7 +81,8 @@ class VueLocalStorage {
         return parseInt(value, 10)
       case Array:
         try {
-          let array = JSON.parse(value)
+          const array = JSON.parse(value)
+
           return Array.isArray(array) ? array : []
         } catch (e) {
           return []
@@ -116,7 +118,7 @@ export default {
               VueLocalStorage._properties[key] = {}
             }
 
-            let type = (this.$options.localStorage[key].hasOwnProperty('type'))
+            const type = (this.$options.localStorage[key].hasOwnProperty('type'))
               ? this.$options.localStorage[key].type
               : String
 
@@ -125,7 +127,8 @@ export default {
             // Check for default value
             if (!ls.hasOwnProperty(key) && this.$options.localStorage[key].hasOwnProperty('default')
             ) {
-              let value = this.$options.localStorage[key].default
+              const value = this.$options.localStorage[key].default
+
               ls[key] = (type === Array || type === Object) ? JSON.stringify(value) : value
             }
           }

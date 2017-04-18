@@ -37,6 +37,7 @@
 
                 if ((key === lsKey) && (type === Array || type === Object)) {
                     ls[lsKey] = JSON.stringify(value);
+
                     return value;
                 }
             }
@@ -59,6 +60,7 @@
                 case Array:
                     try {
                         var array = JSON.parse(value);
+
                         return Array.isArray(array) ? array : [];
                     } catch (e) {
                         return [];
