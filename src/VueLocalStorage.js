@@ -12,9 +12,10 @@ class VueLocalStorage {
    * Get value from localStorage
    *
    * @param {String} lsKey
+   * @param {*} defaultValue
    * @returns {*}
    */
-  get (lsKey) {
+  get (lsKey, defaultValue = null) {
     if (ls[lsKey]) {
       let type = String
 
@@ -28,7 +29,7 @@ class VueLocalStorage {
       return this._process(type, ls[lsKey])
     }
 
-    return null
+    return defaultValue !== null ? defaultValue : null
   }
 
   /**
@@ -43,13 +44,13 @@ class VueLocalStorage {
       const type = this._properties[key].type
 
       if ((key === lsKey) && [Array, Object].includes(type)) {
-        ls[lsKey] = JSON.stringify(value)
+        ls.setItem(lsKey, JSON.stringify(value))
 
         return value
       }
     }
 
-    ls[lsKey] = value
+    ls.setItem(lsKey, value)
 
     return value
   }
@@ -73,12 +74,10 @@ class VueLocalStorage {
   addProperty (key, type, defaultValue) {
     type = type || String
 
-    if (!this._properties[key]) {
-      this._properties[key] = { type }
-    }
+    this._properties[key] = { type }
 
-    if (!ls[key] && defaultValue) {
-      ls[key] = [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue
+    if (!ls[key] && defaultValue !== null) {
+      ls.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue)
     }
   }
 
