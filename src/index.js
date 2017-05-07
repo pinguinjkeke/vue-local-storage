@@ -12,7 +12,7 @@ try {
 }
 
 export default {
-  install (Vue) {
+  install: (Vue) => {
     Vue.mixin({
       created () {
         if (this.$options.localStorage) {
@@ -22,12 +22,10 @@ export default {
             VueLocalStorage.addProperty(key, type, defaultValue)
           })
         }
-
-        // Global localStorage instance
-        this.$localStorage = VueLocalStorage
       }
     })
 
-    Vue.prototype.localStorage = VueLocalStorage
+    Vue.localStorage = VueLocalStorage
+    Vue.prototype.$localStorage = VueLocalStorage
   }
 }
