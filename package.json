@@ -2,7 +2,7 @@
   "name": "vue-localstorage",
   "version": "0.2.0",
   "description": "Vue.js localStorage plugin with types support",
-  "main": "dist/vue-localstorage.js",
+  "main": "dist/vue-local-storage.js",
   "scripts": {
     "build:es": "rollup -c build/rollup.es2015.js",
     "build:main": "rollup -c build/rollup.config.js",
