@@ -1,4 +1,8 @@
 const ls = window.localStorage
+const isJSONify = (value) => {
+  return Object.prototype.toString.call(value).includes('Object') 
+        || Object.prototype.toString.call(value).includes('Array')
+}
 
 class VueLocalStorage {
   /**
@@ -43,7 +47,7 @@ class VueLocalStorage {
     for (const key in this._properties) {
       const type = this._properties[key].type
 
-      if ((key === lsKey) && [Array, Object].includes(type)) {
+      if ((key === lsKey) && isJSONify(type)) {
         ls.setItem(lsKey, JSON.stringify(value))
 
         return value
@@ -77,7 +81,7 @@ class VueLocalStorage {
     this._properties[key] = { type }
 
     if (!ls[key] && defaultValue !== null) {
-      ls.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue)
+      ls.setItem(key, isJSONify(type) ? JSON.stringify(defaultValue) : defaultValue)
     }
   }
 
