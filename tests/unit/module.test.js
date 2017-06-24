@@ -63,3 +63,27 @@ test('it adds all properties from components or Vue instance', () => {
 
   expect(Vue.localStorage.get('theObject')).toEqual({ hello: 'world' })
 })
+
+test('It can change default $localStorage binding to any other binding with config', () => {
+  require('mock-local-storage')
+
+  const Vue = require('vue')
+  const VueLocalStorage = require('../../src').default
+
+  Vue.use(VueLocalStorage, {
+    name: 'ls'
+  })
+
+  const instance = new Vue({
+    render: (h) => h('div'),
+    ls: {
+      someNumber: {
+        type: Number,
+        default: 123
+      }
+    }
+  })
+
+  expect(Vue.ls.get('someNumber')).toEqual(123)
+  expect(instance.$ls.get('someNumber')).toEqual(123)
+})

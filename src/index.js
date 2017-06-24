@@ -12,12 +12,20 @@ try {
 }
 
 export default {
-  install: (Vue) => {
+  /**
+   * Install vue-local-storage plugin
+   *
+   * @param {Vue} Vue
+   * @param {Object} options
+   */
+  install: (Vue, options = {}) => {
+    const name = options.name || 'localStorage'
+
     Vue.mixin({
       created () {
-        if (this.$options.localStorage) {
-          Object.keys(this.$options.localStorage).forEach((key) => {
-            const [type, defaultValue] = [this.$options.localStorage[key].type, this.$options.localStorage[key].default]
+        if (this.$options[name]) {
+          Object.keys(this.$options[name]).forEach((key) => {
+            const [type, defaultValue] = [this.$options[name][key].type, this.$options[name][key].default]
 
             VueLocalStorage.addProperty(key, type, defaultValue)
           })
@@ -25,7 +33,7 @@ export default {
       }
     })
 
-    Vue.localStorage = VueLocalStorage
-    Vue.prototype.$localStorage = VueLocalStorage
+    Vue[name] = VueLocalStorage
+    Vue.prototype[`$${name}`] = VueLocalStorage
   }
 }

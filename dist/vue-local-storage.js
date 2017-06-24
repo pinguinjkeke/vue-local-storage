@@ -1,5 +1,5 @@
 /**
- * vee-validate v0.1.3
+ * vue-local-storage v0.2.0
  * (c) 2017 Abdelrahman Awad
  * @license MIT
  */
@@ -78,10 +78,10 @@ VueLocalStorage.prototype.remove = function remove (lsKey) {
 
 /**
  * Add new property to localStorage
- * 
- * @param {String} key 
- * @param {function} type 
- * @param {*} defaultValue 
+ *
+ * @param {String} key
+ * @param {function} type
+ * @param {*} defaultValue
  */
 VueLocalStorage.prototype.addProperty = function addProperty (key, type, defaultValue) {
   type = type || String;
@@ -126,7 +126,7 @@ VueLocalStorage.prototype._process = function _process (type, value) {
   }
 };
 
-var vueLocalStorage = new VueLocalStorage();
+var VueLocalStorage$1 = new VueLocalStorage();
 
 var ls = window.localStorage;
 
@@ -140,25 +140,35 @@ try {
 }
 
 var index = {
-  install: function (Vue) {
+  /**
+   * Install vue-local-storage plugin
+   *
+   * @param {Vue} Vue
+   * @param {Object} options
+   */
+  install: function (Vue, options) {
+    if ( options === void 0 ) options = {};
+
+    var name = options.name || 'localStorage';
+
     Vue.mixin({
       created: function created () {
         var this$1 = this;
 
-        if (this.$options.localStorage) {
-          Object.keys(this.$options.localStorage).forEach(function (key) {
-            var ref = [this$1.$options.localStorage[key].type, this$1.$options.localStorage[key].default];
+        if (this.$options[name]) {
+          Object.keys(this.$options[name]).forEach(function (key) {
+            var ref = [this$1.$options[name][key].type, this$1.$options[name][key].default];
             var type = ref[0];
             var defaultValue = ref[1];
 
-            vueLocalStorage.addProperty(key, type, defaultValue);
+            VueLocalStorage$1.addProperty(key, type, defaultValue);
           });
         }
       }
     });
 
-    Vue.localStorage = vueLocalStorage;
-    Vue.prototype.$localStorage = vueLocalStorage;
+    Vue[name] = VueLocalStorage$1;
+    Vue.prototype[("$" + name)] = VueLocalStorage$1;
   }
 };
 

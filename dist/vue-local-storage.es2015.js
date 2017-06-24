@@ -1,5 +1,5 @@
 /**
- * vee-validate v0.1.3
+ * vue-local-storage v0.2.0
  * (c) 2017 Abdelrahman Awad
  * @license MIT
  */
@@ -24,7 +24,7 @@ class VueLocalStorage {
     if (ls$1[lsKey]) {
       let type = String;
 
-      for (let key in this._properties) {
+      for (const key in this._properties) {
         if (key === lsKey) {
           type = this._properties[key].type;
           break
@@ -45,7 +45,7 @@ class VueLocalStorage {
    * @returns {*}
    */
   set (lsKey, value) {
-    for (let key in this._properties) {
+    for (const key in this._properties) {
       const type = this._properties[key].type;
 
       if ((key === lsKey) && [Array, Object].includes(type)) {
@@ -71,10 +71,10 @@ class VueLocalStorage {
 
   /**
    * Add new property to localStorage
-   * 
-   * @param {String} key 
-   * @param {function} type 
-   * @param {*} defaultValue 
+   *
+   * @param {String} key
+   * @param {function} type
+   * @param {*} defaultValue
    */
   addProperty (key, type, defaultValue) {
     type = type || String;
@@ -120,7 +120,7 @@ class VueLocalStorage {
   }
 }
 
-const vueLocalStorage = new VueLocalStorage();
+var VueLocalStorage$1 = new VueLocalStorage();
 
 const ls = window.localStorage;
 
@@ -134,21 +134,29 @@ try {
 }
 
 var index = {
-  install: (Vue) => {
+  /**
+   * Install vue-local-storage plugin
+   *
+   * @param {Vue} Vue
+   * @param {Object} options
+   */
+  install: (Vue, options = {}) => {
+    const name = options.name || 'localStorage';
+
     Vue.mixin({
       created () {
-        if (this.$options.localStorage) {
-          Object.keys(this.$options.localStorage).forEach((key) => {
-            const [type, defaultValue] = [this.$options.localStorage[key].type, this.$options.localStorage[key].default];
+        if (this.$options[name]) {
+          Object.keys(this.$options[name]).forEach((key) => {
+            const [type, defaultValue] = [this.$options[name][key].type, this.$options[name][key].default];
 
-            vueLocalStorage.addProperty(key, type, defaultValue);
+            VueLocalStorage$1.addProperty(key, type, defaultValue);
           });
         }
       }
     });
 
-    Vue.localStorage = vueLocalStorage;
-    Vue.prototype.$localStorage = vueLocalStorage;
+    Vue[name] = VueLocalStorage$1;
+    Vue.prototype[`$${name}`] = VueLocalStorage$1;
   }
 };
 
