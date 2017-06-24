@@ -21,11 +21,11 @@ localStorage plugin with types support for Vue.js and Vue.js 2.
   Vue.use(VueLocalStorage)
 
   // Use localStorage from Vue object
-  Vue.$localStorage.set('someNumber', 123)
-  Vue.$localStorage.get('someNumber')
+  Vue.localStorage.set('someNumber', 123)
+  Vue.localStorage.get('someNumber')
 
   // Fallback value if nothing found in localStorage
-  Vue.$localStorage.get('propertyThatNotExists', 'fallbackValue') // Will return 'fallbackValue' string
+  Vue.localStorage.get('propertyThatNotExists', 'fallbackValue') // Will return 'fallbackValue' string
   
   var vm = new Vue({
     localStorage: {
