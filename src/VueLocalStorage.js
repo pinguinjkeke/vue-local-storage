@@ -19,7 +19,7 @@ class VueLocalStorage {
     if (ls[lsKey]) {
       let type = String
 
-      for (let key in this._properties) {
+      for (const key in this._properties) {
         if (key === lsKey) {
           type = this._properties[key].type
           break
@@ -40,7 +40,7 @@ class VueLocalStorage {
    * @returns {*}
    */
   set (lsKey, value) {
-    for (let key in this._properties) {
+    for (const key in this._properties) {
       const type = this._properties[key].type
 
       if ((key === lsKey) && [Array, Object].includes(type)) {
@@ -66,10 +66,10 @@ class VueLocalStorage {
 
   /**
    * Add new property to localStorage
-   * 
-   * @param {String} key 
-   * @param {function} type 
-   * @param {*} defaultValue 
+   *
+   * @param {String} key
+   * @param {function} type
+   * @param {*} defaultValue
    */
   addProperty (key, type, defaultValue) {
     type = type || String
@@ -115,6 +115,4 @@ class VueLocalStorage {
   }
 }
 
-const vueLocalStorage = new VueLocalStorage()
-
-export default vueLocalStorage
+export default new VueLocalStorage()
