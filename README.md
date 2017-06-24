@@ -22,7 +22,7 @@ localStorage plugin with types support for Vue.js and Vue.js 2.
   // Or you can specify any other name and use it via this.$ls, this.$whatEverYouWant
   Vue.use(VueLocalStorage, {
     name: 'ls'
-  }
+  })
 
   // Use localStorage from Vue object
   Vue.localStorage.set('someNumber', 123)
