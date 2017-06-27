@@ -1,7 +1,24 @@
 {
   "name": "vue-localstorage",
-  "version": "0.3.0",
   "description": "Vue.js localStorage plugin with types support",
+  "version": "0.3.0",
+  "author": {
+    "name": "Alexander Avakov",
+    "email": "yaavakov@gmail.com"
+  },
+  "keywords": [
+    "vuejs",
+    "vuejs2",
+    "localstorage",
+    "vue"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pinguinjkeke/vue-local-storage"
+  },
+  "bugs": {
+    "url": "https://github.com/pinguinjkeke/vue-local-storage/issues"
+  },
   "main": "dist/vue-local-storage.js",
   "files": [
     "src",
@@ -15,20 +32,7 @@
     "coverage": "jest --coverage",
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pinguinjkeke/vue-local-storage"
-  },
-  "keywords": [
-    "vuejs",
-    "localstorage",
-    "vue"
-  ],
-  "author": "Alexander Avakov",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/pinguinjkeke/vue-local-storage/issues"
-  },
   "homepage": "https://github.com/pinguinjkeke/vue-local-storage#readme",
   "devDependencies": {
     "babel-jest": "^19.0.0",
