@@ -1,4 +1,5 @@
 # VueLocalStorage
+[![CircleCI status](https://circleci.com/gh/pinguinjkeke/vue-local-storage/tree/master.svg?style=shield)](https://circleci.com/gh/pinguinjkeke/vue-local-storage/tree/master.svg?style=shield)
 [![npm version](https://img.shields.io/npm/v/vue-localstorage.svg)](https://www.npmjs.com/package/vue-localstorage)
 [![npm downloads](https://img.shields.io/npm/dt/vue-localstorage.svg)](https://www.npmjs.com/package/vue-localstorage)
 
@@ -22,7 +23,7 @@ localStorage plugin with types support for Vue.js and Vue.js 2.
   // Or you can specify any other name and use it via this.$ls, this.$whatEverYouWant
   Vue.use(VueLocalStorage, {
     name: 'ls'
-  }
+  })
 
   // Use localStorage from Vue object
   Vue.localStorage.set('someNumber', 123)
