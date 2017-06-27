@@ -1,0 +1,6 @@
+machine:
+  node:
+    version: 7
+test:
+  post:
+    - npm run test
