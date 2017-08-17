@@ -10,7 +10,7 @@ export default {
   entry: 'src/index.js',
   dest: 'dist/vue-local-storage.js',
   format: 'umd',
-  moduleName: 'VeeValidate',
+  moduleName: 'VueLocalStorage',
   plugins: [
     replace({ __VERSION__: version }),
     nodeResolve(),
