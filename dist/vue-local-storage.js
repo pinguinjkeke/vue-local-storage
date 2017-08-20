@@ -1,12 +1,12 @@
 /**
- * vue-local-storage v0.2.0
+ * vue-local-storage v0.3.0
  * (c) 2017 Abdelrahman Awad
  * @license MIT
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 	typeof define === 'function' && define.amd ? define(factory) :
-	(global.VeeValidate = factory());
+	(global.VueLocalStorage = factory());
 }(this, (function () { 'use strict';
 
 var ls$1 = window.localStorage;
