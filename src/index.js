@@ -1,16 +1,5 @@
 import VueLocalStorage from './VueLocalStorage'
 
-const ls = window.localStorage
-
-try {
-  const test = '__vue-localstorage-test__'
-
-  ls.setItem(test, test)
-  ls.removeItem(test)
-} catch (e) {
-  console.error('Local storage is not supported')
-}
-
 export default {
   /**
    * Install vue-local-storage plugin
@@ -19,6 +8,25 @@ export default {
    * @param {Object} options
    */
   install: (Vue, options = {}) => {
+    if (process &&
+      (
+        process.server ||
+        process.SERVER_BUILD ||
+        (process.env && process.env.VUE_ENV === 'server')
+      )
+    ) {
+      return
+    }
+
+    try {
+      const test = '__vue-localstorage-test__'
+
+      window.localStorage.setItem(test, test)
+      window.localStorage.removeItem(test)
+    } catch (e) {
+      console.error('Local storage is not supported')
+    }
+
     const name = options.name || 'localStorage'
 
     Vue.mixin({

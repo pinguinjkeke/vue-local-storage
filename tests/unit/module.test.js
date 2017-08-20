@@ -8,16 +8,18 @@ test('it should pass an error to console if local storage not available', () => 
     removeItem: () => { throw new Exception('Component is not available') }
   }
 
-  global.localStorage = stubLocalStorage
+  global.localStorage = {}
   global.console.error = jest.fn()
 
-  require('../../src')
+  let vueLocalStorage = require('../../src').default
+
+  Vue.use(vueLocalStorage)
 
   jest.resetModules()
 
-  stubLocalStorage.setItem = stubLocalStorage.removeItem
+  vueLocalStorage = require('../../src').default
 
-  require('../../src')
+  Vue.use(vueLocalStorage)
 
   expect(console.error.mock.calls.length).toBe(2)
   expect(console.error.mock.calls[0][0]).toBe('Local storage is not supported')
@@ -86,4 +88,15 @@ test('It can change default $localStorage binding to any other binding with conf
 
   expect(Vue.ls.get('someNumber')).toEqual(123)
   expect(instance.$ls.get('someNumber')).toEqual(123)
+})
+
+test('It wont install when using SSR', () => {
+  Vue.localStorage = undefined
+  process.server = true
+
+  const VueLocalStorage = require('../../src').default
+
+  Vue.use(VueLocalStorage)
+
+  expect(Vue.localStorage).toEqual(undefined)
 })
