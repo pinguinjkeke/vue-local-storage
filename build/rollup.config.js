@@ -21,7 +21,7 @@ export default {
   banner:
 `/**
  * vue-local-storage v${version}
- * (c) ${new Date().getFullYear()} Abdelrahman Awad
+ * (c) ${new Date().getFullYear()} Alexander Avakov
  * @license MIT
  */`
 }
