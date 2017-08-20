@@ -3,7 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/vue-localstorage.svg)](https://www.npmjs.com/package/vue-localstorage)
 [![npm downloads](https://img.shields.io/npm/dt/vue-localstorage.svg)](https://www.npmjs.com/package/vue-localstorage)
 
-localStorage plugin with types support for Vue.js and Vue.js 2.
+LocalStorage plugin with types support for Vue.js and Vue.js 2.
+SSR supported!
 
 ## Install
 
