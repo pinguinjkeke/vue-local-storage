@@ -1,6 +1,6 @@
 /**
- * vue-local-storage v0.3.0
- * (c) 2017 Abdelrahman Awad
+ * vue-local-storage v0.4.0
+ * (c) 2017 Alexander Avakov
  * @license MIT
  */
 (function (global, factory) {
@@ -9,7 +9,7 @@
 	(global.VueLocalStorage = factory());
 }(this, (function () { 'use strict';
 
-var ls$1 = window.localStorage;
+var ls = window.localStorage;
 
 var VueLocalStorage = function VueLocalStorage () {
   this._properties = {};
@@ -26,7 +26,7 @@ VueLocalStorage.prototype.get = function get (lsKey, defaultValue) {
     var this$1 = this;
     if ( defaultValue === void 0 ) defaultValue = null;
 
-  if (ls$1[lsKey]) {
+  if (ls[lsKey]) {
     var type = String;
 
     for (var key in this$1._properties) {
@@ -36,7 +36,7 @@ VueLocalStorage.prototype.get = function get (lsKey, defaultValue) {
       }
     }
 
-    return this._process(type, ls$1[lsKey])
+    return this._process(type, ls[lsKey])
   }
 
   return defaultValue !== null ? defaultValue : null
@@ -56,13 +56,13 @@ VueLocalStorage.prototype.set = function set (lsKey, value) {
     var type = this$1._properties[key].type;
 
     if ((key === lsKey) && [Array, Object].includes(type)) {
-      ls$1.setItem(lsKey, JSON.stringify(value));
+      ls.setItem(lsKey, JSON.stringify(value));
 
       return value
     }
   }
 
-  ls$1.setItem(lsKey, value);
+  ls.setItem(lsKey, value);
 
   return value
 };
@@ -73,7 +73,7 @@ VueLocalStorage.prototype.set = function set (lsKey, value) {
  * @param {String} lsKey
  */
 VueLocalStorage.prototype.remove = function remove (lsKey) {
-  return ls$1.removeItem(lsKey)
+  return ls.removeItem(lsKey)
 };
 
 /**
@@ -88,8 +88,8 @@ VueLocalStorage.prototype.addProperty = function addProperty (key, type, default
 
   this._properties[key] = { type: type };
 
-  if (!ls$1[key] && defaultValue !== null) {
-    ls$1.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
+  if (!ls[key] && defaultValue !== null) {
+    ls.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
   }
 };
 
@@ -128,17 +128,6 @@ VueLocalStorage.prototype._process = function _process (type, value) {
 
 var VueLocalStorage$1 = new VueLocalStorage();
 
-var ls = window.localStorage;
-
-try {
-  var test = '__vue-localstorage-test__';
-
-  ls.setItem(test, test);
-  ls.removeItem(test);
-} catch (e) {
-  console.error('Local storage is not supported');
-}
-
 var index = {
   /**
    * Install vue-local-storage plugin
@@ -148,6 +137,25 @@ var index = {
    */
   install: function (Vue, options) {
     if ( options === void 0 ) options = {};
+
+    if (process &&
+      (
+        process.server ||
+        process.SERVER_BUILD ||
+        (process.env && process.env.VUE_ENV === 'server')
+      )
+    ) {
+      return
+    }
+
+    try {
+      var test = '__vue-localstorage-test__';
+
+      window.localStorage.setItem(test, test);
+      window.localStorage.removeItem(test);
+    } catch (e) {
+      console.error('Local storage is not supported');
+    }
 
     var name = options.name || 'localStorage';
 

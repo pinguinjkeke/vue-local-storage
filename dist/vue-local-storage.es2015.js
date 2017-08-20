@@ -1,9 +1,9 @@
 /**
- * vue-local-storage v0.3.0
- * (c) 2017 Abdelrahman Awad
+ * vue-local-storage v0.4.0
+ * (c) 2017 Alexander Avakov
  * @license MIT
  */
-const ls$1 = window.localStorage;
+const ls = window.localStorage;
 
 class VueLocalStorage {
   /**
@@ -21,7 +21,7 @@ class VueLocalStorage {
    * @returns {*}
    */
   get (lsKey, defaultValue = null) {
-    if (ls$1[lsKey]) {
+    if (ls[lsKey]) {
       let type = String;
 
       for (const key in this._properties) {
@@ -31,7 +31,7 @@ class VueLocalStorage {
         }
       }
 
-      return this._process(type, ls$1[lsKey])
+      return this._process(type, ls[lsKey])
     }
 
     return defaultValue !== null ? defaultValue : null
@@ -49,13 +49,13 @@ class VueLocalStorage {
       const type = this._properties[key].type;
 
       if ((key === lsKey) && [Array, Object].includes(type)) {
-        ls$1.setItem(lsKey, JSON.stringify(value));
+        ls.setItem(lsKey, JSON.stringify(value));
 
         return value
       }
     }
 
-    ls$1.setItem(lsKey, value);
+    ls.setItem(lsKey, value);
 
     return value
   }
@@ -66,7 +66,7 @@ class VueLocalStorage {
    * @param {String} lsKey
    */
   remove (lsKey) {
-    return ls$1.removeItem(lsKey)
+    return ls.removeItem(lsKey)
   }
 
   /**
@@ -81,8 +81,8 @@ class VueLocalStorage {
 
     this._properties[key] = { type };
 
-    if (!ls$1[key] && defaultValue !== null) {
-      ls$1.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
+    if (!ls[key] && defaultValue !== null) {
+      ls.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
     }
   }
 
@@ -122,17 +122,6 @@ class VueLocalStorage {
 
 var VueLocalStorage$1 = new VueLocalStorage();
 
-const ls = window.localStorage;
-
-try {
-  const test = '__vue-localstorage-test__';
-
-  ls.setItem(test, test);
-  ls.removeItem(test);
-} catch (e) {
-  console.error('Local storage is not supported');
-}
-
 var index = {
   /**
    * Install vue-local-storage plugin
@@ -141,6 +130,25 @@ var index = {
    * @param {Object} options
    */
   install: (Vue, options = {}) => {
+    if (process &&
+      (
+        process.server ||
+        process.SERVER_BUILD ||
+        (process.env && process.env.VUE_ENV === 'server')
+      )
+    ) {
+      return
+    }
+
+    try {
+      const test = '__vue-localstorage-test__';
+
+      window.localStorage.setItem(test, test);
+      window.localStorage.removeItem(test);
+    } catch (e) {
+      console.error('Local storage is not supported');
+    }
+
     const name = options.name || 'localStorage';
 
     Vue.mixin({
