@@ -8,7 +8,7 @@ export default {
    * @param {Object} options
    */
   install: (Vue, options = {}) => {
-    if (process &&
+    if (typeof process !== 'undefined' &&
       (
         process.server ||
         process.SERVER_BUILD ||
