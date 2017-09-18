@@ -1,5 +1,5 @@
 /**
- * vue-local-storage v0.4.0
+ * vue-local-storage v0.4.1
  * (c) 2017 Alexander Avakov
  * @license MIT
  */
@@ -138,7 +138,7 @@ var index = {
   install: function (Vue, options) {
     if ( options === void 0 ) options = {};
 
-    if (process &&
+    if (typeof process !== 'undefined' &&
       (
         process.server ||
         process.SERVER_BUILD ||
