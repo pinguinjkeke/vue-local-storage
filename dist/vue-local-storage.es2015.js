@@ -3,8 +3,6 @@
  * (c) 2017 Alexander Avakov
  * @license MIT
  */
-const ls = window.localStorage;
-
 class VueLocalStorage {
   /**
    * VueLocalStorage constructor
@@ -21,7 +19,7 @@ class VueLocalStorage {
    * @returns {*}
    */
   get (lsKey, defaultValue = null) {
-    if (ls[lsKey]) {
+    if (window.localStorage[lsKey]) {
       let type = String;
 
       for (const key in this._properties) {
@@ -31,7 +29,7 @@ class VueLocalStorage {
         }
       }
 
-      return this._process(type, ls[lsKey])
+      return this._process(type, window.localStorage[lsKey])
     }
 
     return defaultValue !== null ? defaultValue : null
@@ -49,13 +47,13 @@ class VueLocalStorage {
       const type = this._properties[key].type;
 
       if ((key === lsKey) && [Array, Object].includes(type)) {
-        ls.setItem(lsKey, JSON.stringify(value));
+        window.localStorage.setItem(lsKey, JSON.stringify(value));
 
         return value
       }
     }
 
-    ls.setItem(lsKey, value);
+    window.localStorage.setItem(lsKey, value);
 
     return value
   }
@@ -66,7 +64,7 @@ class VueLocalStorage {
    * @param {String} lsKey
    */
   remove (lsKey) {
-    return ls.removeItem(lsKey)
+    return window.localStorage.removeItem(lsKey)
   }
 
   /**
@@ -81,8 +79,8 @@ class VueLocalStorage {
 
     this._properties[key] = { type };
 
-    if (!ls[key] && defaultValue !== null) {
-      ls.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
+    if (!window.localStorage[key] && defaultValue !== null) {
+      window.localStorage.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
     }
   }
 

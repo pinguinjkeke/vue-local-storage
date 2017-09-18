@@ -9,8 +9,6 @@
 	(global.VueLocalStorage = factory());
 }(this, (function () { 'use strict';
 
-var ls = window.localStorage;
-
 var VueLocalStorage = function VueLocalStorage () {
   this._properties = {};
 };
@@ -26,7 +24,7 @@ VueLocalStorage.prototype.get = function get (lsKey, defaultValue) {
     var this$1 = this;
     if ( defaultValue === void 0 ) defaultValue = null;
 
-  if (ls[lsKey]) {
+  if (window.localStorage[lsKey]) {
     var type = String;
 
     for (var key in this$1._properties) {
@@ -36,7 +34,7 @@ VueLocalStorage.prototype.get = function get (lsKey, defaultValue) {
       }
     }
 
-    return this._process(type, ls[lsKey])
+    return this._process(type, window.localStorage[lsKey])
   }
 
   return defaultValue !== null ? defaultValue : null
@@ -56,13 +54,13 @@ VueLocalStorage.prototype.set = function set (lsKey, value) {
     var type = this$1._properties[key].type;
 
     if ((key === lsKey) && [Array, Object].includes(type)) {
-      ls.setItem(lsKey, JSON.stringify(value));
+      window.localStorage.setItem(lsKey, JSON.stringify(value));
 
       return value
     }
   }
 
-  ls.setItem(lsKey, value);
+  window.localStorage.setItem(lsKey, value);
 
   return value
 };
@@ -73,7 +71,7 @@ VueLocalStorage.prototype.set = function set (lsKey, value) {
  * @param {String} lsKey
  */
 VueLocalStorage.prototype.remove = function remove (lsKey) {
-  return ls.removeItem(lsKey)
+  return window.localStorage.removeItem(lsKey)
 };
 
 /**
@@ -88,8 +86,8 @@ VueLocalStorage.prototype.addProperty = function addProperty (key, type, default
 
   this._properties[key] = { type: type };
 
-  if (!ls[key] && defaultValue !== null) {
-    ls.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
+  if (!window.localStorage[key] && defaultValue !== null) {
+    window.localStorage.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue);
   }
 };
 
