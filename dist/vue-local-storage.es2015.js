@@ -1,5 +1,5 @@
 /**
- * vue-local-storage v0.4.1
+ * vue-local-storage v0.4.2
  * (c) 2017 Alexander Avakov
  * @license MIT
  */
