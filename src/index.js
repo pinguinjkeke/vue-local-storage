@@ -36,12 +36,13 @@ export default {
             const [type, defaultValue] = [this.$options[name][key].type, this.$options[name][key].default]
 
             VueLocalStorage.addProperty(key, type, defaultValue)
-            
-            this.$options.computed[key] = {
-              get() { return Vue.localStorage.get(key, defaultValue) },
-              set(val) { Vue.localStorage.set(key, val) }
+                        
+            if (options.createComputed) {                                      
+              this.$options.computed[key] = {
+                get() { return Vue.localStorage.get(key, defaultValue) },
+                set(val) { Vue.localStorage.set(key, val) }
+              }
             }
-            
           })
         }
       }
