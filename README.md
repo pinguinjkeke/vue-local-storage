@@ -32,6 +32,8 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
   // Fallback value if nothing found in localStorage
   Vue.localStorage.get('propertyThatNotExists', 'fallbackValue') // Will return 'fallbackValue' string
   
+  //register localStorage variables and adds computed variables to local components
+  //to be used like regular computeds that are stored in the localstorage
   var vm = new Vue({
     localStorage: {
       someObject: {
