@@ -28,19 +28,40 @@ export default {
     }
 
     const name = options.name || 'localStorage'
+    const bind = options.bind
 
     Vue.mixin({
-      beforeCreated () {
+      beforeCreate () {
         if (this.$options[name]) {
           Object.keys(this.$options[name]).forEach((key) => {
-            const [type, defaultValue] = [this.$options[name][key].type, this.$options[name][key].default]
+            const config = this.$options[name][key]
+            const [type, defaultValue] = [config.type, config.default]
 
             VueLocalStorage.addProperty(key, type, defaultValue)
-                        
-            if (options.createComputed) {                                      
-              this.$options.computed[key] = {
-                get() { return Vue.localStorage.get(key, defaultValue) },
-                set(val) { Vue.localStorage.set(key, val) }
+
+            if ((bind || config.bind) && config.bind !== false) {
+              this.$options.computed = this.$options.computed || {}
+
+              if (!this.$options.computed[key]) {
+                let prefix = config.prefix
+                if ((typeof prefix !== 'function')) {
+                  const prefixValue = prefix || ''
+                  prefix = () => (prefixValue)
+                }
+
+                this.$options.computed[key] = {
+                  get () {
+                    const finalKey = prefix() + key
+                    return Vue.localStorage.get(finalKey, defaultValue)
+                  },
+                  set (val) {
+                    const finalKey = prefix() + key
+                    Vue.localStorage.set(finalKey, val)
+                    this._computedWatchers[key].dirty = true
+                  }
+                }
+              } else {
+                console.log(key + ': is already a "computed" member and will not be mapped to the localstorage')
               }
             }
           })
