@@ -22,7 +22,8 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
   Vue.use(VueLocalStorage)
   // Or you can specify any other name and use it via this.$ls, this.$whatEverYouWant
   Vue.use(VueLocalStorage, {
-    name: 'ls'
+    name: 'ls',
+    createComputed: true //created computed members from your variable declarations
   })
 
   // Use localStorage from Vue object
