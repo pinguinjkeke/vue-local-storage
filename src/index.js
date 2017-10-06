@@ -30,12 +30,18 @@ export default {
     const name = options.name || 'localStorage'
 
     Vue.mixin({
-      created () {
+      beforeCreated () {
         if (this.$options[name]) {
           Object.keys(this.$options[name]).forEach((key) => {
             const [type, defaultValue] = [this.$options[name][key].type, this.$options[name][key].default]
 
             VueLocalStorage.addProperty(key, type, defaultValue)
+            
+            this.$options.computed[key] = {
+              get() { return Vue.localStorage.get(key, defaultValue) },
+              set(val) { Vue.localStorage.set(key, val) }
+            }
+            
           })
         }
       }
