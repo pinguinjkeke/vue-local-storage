@@ -1,6 +1,10 @@
 import Vue from 'vue'
 
-afterEach(jest.resetModules)
+afterEach(() => {
+  jest.resetModules()
+
+  process.server = false
+})
 
 test('it should pass an error to console if local storage not available', () => {
   const stubLocalStorage = {
@@ -98,12 +102,11 @@ test('It wont install when using SSR', () => {
 
   Vue.use(VueLocalStorage)
 
-  expect(Vue.localStorage).toEqual(undefined)
+  expect(Vue.localStorage).toBeUndefined()
 })
 
 test('If bind option is true-ish, instances will have computed properties', () => {
   require('mock-local-storage')
-  process.server = false
 
   const Vue = require('vue')
   const VueLocalStorage = require('../../src').default
@@ -127,7 +130,6 @@ test('If bind option is true-ish, instances will have computed properties', () =
 
 test('bound properties hold their values across isntances', () => {
   require('mock-local-storage')
-  process.server = false
 
   const Vue = require('vue')
   const VueLocalStorage = require('../../src').default
@@ -158,9 +160,8 @@ test('bound properties hold their values across isntances', () => {
   expect(instance.someNumber).toBe(321)
 })
 
-test('enablement flags for bindings', function() {
+test('enablement flags for bindings', () => {
   require('mock-local-storage')
-  process.server = false
 
   let Vue = require('vue')
   let VueLocalStorage = require('../../src').default
