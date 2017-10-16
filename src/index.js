@@ -51,7 +51,7 @@ export default {
               Object.defineProperty(VueLocalStorage, key, prop)
               Vue.util.defineReactive(VueLocalStorage, key, defaultValue)
             } else if (!Vue.config.silent) {
-              console.log(key + ': is already defined and will be reused')
+              console.log(`${key}: is already defined and will be reused`)
             }
 
             if ((bind || config.bind) && config.bind !== false) {
@@ -62,8 +62,6 @@ export default {
                   get: () => Vue.localStorage[key],
                   set: (val) => { Vue.localStorage[key] = val }
                 }
-              } else if (!Vue.config.silent) {
-                console.log(key + ': is already a "computed" member and will not be mapped to the localStorage')
               }
             }
           })
