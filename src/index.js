@@ -31,7 +31,7 @@ export default {
     const bind = options.bind
 
     Vue.mixin({
-      beforeCreate() {
+      beforeCreate () {
         if (this.$options[name]) {
           Object.keys(this.$options[name]).forEach((key) => {
             const config = this.$options[name][key]
@@ -40,29 +40,16 @@ export default {
             VueLocalStorage.addProperty(key, type, defaultValue)
 
             const existingProp = Object.getOwnPropertyDescriptor(VueLocalStorage, key)
+
             if (!existingProp) {
-
-              let prefix = config.prefix
-
-              if (prefix) {
-                if (typeof prefix !== 'string') {
-                  console.error('vue-localstorage: prefix must be strings')
-                }
-              }
-
-              let prop = {
-                get () {
-                  return Vue.localStorage.get(key, defaultValue)
-                },
-                set (val) {
-                  Vue.localStorage.set(key, val)
-                },
+              const prop = {
+                get: () => Vue.localStorage.get(key, defaultValue),
+                set: val => Vue.localStorage.set(key, val),
                 configurable: true
               }
 
               Object.defineProperty(VueLocalStorage, key, prop)
               Vue.util.defineReactive(VueLocalStorage, key, defaultValue)
-
             } else if (!Vue.config.silent) {
               console.log(key + ': is already defined and will be reused')
             }
@@ -71,20 +58,14 @@ export default {
               this.$options.computed = this.$options.computed || {}
 
               if (!this.$options.computed[key]) {
-
                 this.$options.computed[key] = {
-                  get () {
-                    return Vue.localStorage[key]
-                  },
-                  set (val) {
-                    Vue.localStorage[key] = val
-                  }
+                  get: () => Vue.localStorage[key],
+                  set: (val) => { Vue.localStorage[key] = val }
                 }
               } else if (!Vue.config.silent) {
-                console.log(key + ': is already a "computed" member and will not be mapped to the localstorage')
+                console.log(key + ': is already a "computed" member and will not be mapped to the localStorage')
               }
             }
-
           })
         }
       }

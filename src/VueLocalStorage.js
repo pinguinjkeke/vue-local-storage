@@ -69,13 +69,16 @@ class VueLocalStorage {
    * @param {function} type
    * @param {*} defaultValue
    */
-  addProperty (key, type, defaultValue) {
+  addProperty (key, type, defaultValue = undefined) {
     type = type || String
 
     this._properties[key] = { type }
 
     if (!window.localStorage[key] && defaultValue !== null) {
-      window.localStorage.setItem(key, [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue)
+      window.localStorage.setItem(
+        key,
+        [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue
+      )
     }
   }
 
