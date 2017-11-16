@@ -28,7 +28,7 @@
     "build:es": "rollup -c build/rollup.es2015.js",
     "build:main": "rollup -c build/rollup.config.js",
     "build:minify": "rollup -c build/rollup.minify.js",
-    "build": "npm run build:es; npm run build:main; npm run build:minify",
+    "build": "npm run build:es && npm run build:main && npm run build:minify",
     "coverage": "jest --coverage",
     "test": "jest"
   },
