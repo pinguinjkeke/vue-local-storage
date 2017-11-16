@@ -1,3 +1,5 @@
+/* global afterEach, test, expect, localStorage  */
+
 import 'mock-local-storage'
 import vueLocalStorage from '../../src/VueLocalStorage'
 
@@ -154,3 +156,37 @@ test('If property with the same name will be added twice, it replaces older', ()
   vueLocalStorage.addProperty('somethingToReplace', String)
   expect(vueLocalStorage.get('somethingToReplace')).toBe('123')
 })
+
+test('It adds dot to namespace value if it isn\'t empty', () => {
+  const namespace = 'testNamespace'
+  vueLocalStorage.namespace = namespace
+
+  expect(vueLocalStorage.namespace).toBe(`${namespace}.`)
+})
+
+test('It doesn\'t modify namespace if it\'s empty', () => {
+  vueLocalStorage.namespace = ''
+  expect(vueLocalStorage.namespace).toBe('')
+})
+
+test('It sets namespace as empty string if it\'s empty', () => {
+  vueLocalStorage.namespace = undefined
+  expect(vueLocalStorage.namespace).toBe('')
+})
+
+test('It adds namespace to localStorage keys', () => {
+  const namespace = 'testNamespace'
+  vueLocalStorage.namespace = namespace
+
+  // Dynamic
+  vueLocalStorage.set('someKey', 'hello')
+  expect(localStorage.getItem(`${namespace}.someKey`)).toBe('hello')
+  expect(vueLocalStorage.get('someKey')).toBe('hello')
+
+  // Predefined
+  vueLocalStorage.addProperty('otherKey')
+  vueLocalStorage.set('otherKey', 'what')
+  expect(localStorage.getItem(`${namespace}.otherKey`)).toBe('what')
+  expect(vueLocalStorage.get('otherKey')).toBe('what')
+})
+
