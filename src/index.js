@@ -18,12 +18,17 @@ export default {
       return
     }
 
+    let isSupported = true
+
     try {
       const test = '__vue-localstorage-test__'
 
       window.localStorage.setItem(test, test)
       window.localStorage.removeItem(test)
     } catch (e) {
+      isSupported = false
+      vueLocalStorage._isSupported = false
+
       console.error('Local storage is not supported')
     }
 
@@ -36,6 +41,10 @@ export default {
 
     Vue.mixin({
       beforeCreate () {
+        if (!isSupported) {
+          return
+        }
+
         if (this.$options[name]) {
           Object.keys(this.$options[name]).forEach((key) => {
             const config = this.$options[name][key]

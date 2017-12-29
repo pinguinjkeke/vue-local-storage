@@ -5,6 +5,7 @@ class VueLocalStorage {
   constructor () {
     this._properties = {}
     this._namespace = ''
+    this._isSupported = true
   }
 
   /**
@@ -75,6 +76,10 @@ class VueLocalStorage {
    * @returns {*}
    */
   get (lsKey, defaultValue = null, defaultType = String) {
+    if (!this._isSupported) {
+      return null
+    }
+
     if (this._lsGet(lsKey)) {
       let type = defaultType
 
@@ -99,6 +104,10 @@ class VueLocalStorage {
    * @returns {*}
    */
   set (lsKey, value) {
+    if (!this._isSupported) {
+      return null
+    }
+
     for (const key in this._properties) {
       const type = this._properties[key].type
 
@@ -120,6 +129,10 @@ class VueLocalStorage {
    * @param {String} lsKey
    */
   remove (lsKey) {
+    if (!this._isSupported) {
+      return null
+    }
+
     return window.localStorage.removeItem(lsKey)
   }
 
