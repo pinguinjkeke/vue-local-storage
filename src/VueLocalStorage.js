@@ -2,7 +2,7 @@ class VueLocalStorage {
   /**
    * VueLocalStorage constructor
    */
-  constructor (options) {
+  constructor () {
     this._properties = {}
     this._namespace = ''
   }
