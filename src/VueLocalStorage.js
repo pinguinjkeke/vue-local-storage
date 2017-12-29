@@ -153,7 +153,7 @@ class VueLocalStorage {
       case Boolean:
         return value === 'true'
       case Number:
-        return parseInt(value, 10)
+        return parseFloat(value)
       case Array:
         try {
           const array = JSON.parse(value)
