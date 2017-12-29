@@ -135,6 +135,14 @@ test('It returns empty Object on JSON parse exception', () => {
   expect(vueLocalStorage.get('someFailObject')).toEqual({})
 })
 
+test('Default type can be provided', () => {
+  const key = 'somethingWithOverridden'
+
+  localStorage.setItem(key, 123)
+
+  expect(vueLocalStorage.get(key, null, Number)).toEqual(123)
+})
+
 test('It has ability to remove items from local storage', () => {
   vueLocalStorage.addProperty('somethingWillBeRemoved', Number)
   localStorage.setItem('somethingWillBeRemoved', 123)

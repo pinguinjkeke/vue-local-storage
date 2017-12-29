@@ -71,11 +71,12 @@ class VueLocalStorage {
    *
    * @param {String} lsKey
    * @param {*} defaultValue
+   * @param {*} defaultType
    * @returns {*}
    */
-  get (lsKey, defaultValue = null) {
+  get (lsKey, defaultValue = null, defaultType = String) {
     if (this._lsGet(lsKey)) {
-      let type = String
+      let type = defaultType
 
       for (const key in this._properties) {
         if (key === lsKey) {
