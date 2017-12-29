@@ -1,4 +1,4 @@
-import VueLocalStorage from './VueLocalStorage'
+import vueLocalStorage from './VueLocalStorage'
 
 export default {
   /**
@@ -30,6 +30,10 @@ export default {
     const name = options.name || 'localStorage'
     const bind = options.bind
 
+    if (options.namespace) {
+      vueLocalStorage.namespace = options.namespace
+    }
+
     Vue.mixin({
       beforeCreate () {
         if (this.$options[name]) {
@@ -37,9 +41,9 @@ export default {
             const config = this.$options[name][key]
             const [type, defaultValue] = [config.type, config.default]
 
-            VueLocalStorage.addProperty(key, type, defaultValue)
+            vueLocalStorage.addProperty(key, type, defaultValue)
 
-            const existingProp = Object.getOwnPropertyDescriptor(VueLocalStorage, key)
+            const existingProp = Object.getOwnPropertyDescriptor(vueLocalStorage, key)
 
             if (!existingProp) {
               const prop = {
@@ -48,8 +52,8 @@ export default {
                 configurable: true
               }
 
-              Object.defineProperty(VueLocalStorage, key, prop)
-              Vue.util.defineReactive(VueLocalStorage, key, defaultValue)
+              Object.defineProperty(vueLocalStorage, key, prop)
+              Vue.util.defineReactive(vueLocalStorage, key, defaultValue)
             } else if (!Vue.config.silent) {
               console.log(`${key}: is already defined and will be reused`)
             }
@@ -69,7 +73,7 @@ export default {
       }
     })
 
-    Vue[name] = VueLocalStorage
-    Vue.prototype[`$${name}`] = VueLocalStorage
+    Vue[name] = vueLocalStorage
+    Vue.prototype[`$${name}`] = vueLocalStorage
   }
 }

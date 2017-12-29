@@ -1,3 +1,5 @@
+/* global jest, afterEach, test, expect  */
+
 import Vue from 'vue'
 
 afterEach(() => {
@@ -151,7 +153,7 @@ test('bound properties hold their values across isntances', () => {
 
   expect(instance.someNumber).toBe(123)
 
-  instance.someNumber = 321;
+  instance.someNumber = 321
 
   expect(instance.someNumber).toBe(321)
 
@@ -219,4 +221,21 @@ test('enablement flags for bindings', () => {
   })
 
   expect(instance.someNumber).toBe(123)
+})
+
+test('It sets namespace property if it\'s specified', () => {
+  require('mock-local-storage')
+
+  const Vue = require('vue')
+  const VueLocalStorage = require('../../src').default
+
+  const namespace = 'testNamespace'
+
+  Vue.use(VueLocalStorage, { namespace })
+
+  const instance = new Vue({
+    localStorage: { }
+  })
+
+  expect(instance.$localStorage.namespace).toEqual(namespace + '.')
 })

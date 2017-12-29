@@ -2,8 +2,35 @@ class VueLocalStorage {
   /**
    * VueLocalStorage constructor
    */
-  constructor () {
+  constructor (options) {
     this._properties = {}
+    this._namespace = ''
+  }
+
+  get namespace () {
+    return this._namespace
+  }
+
+  set namespace (value) {
+    this._namespace = value ? value + '.' : ''
+  }
+
+  _getLsKey (lsKey) {
+    return this._namespace + lsKey
+  }
+
+  _lsSet (lsKey, rawValue, type) {
+    const key = this._getLsKey(lsKey)
+    const value = type && [Array, Object].includes(type)
+      ? JSON.stringify(rawValue)
+      : rawValue
+
+    window.localStorage.setItem(key, value)
+  }
+
+  _lsGet (lsKey) {
+    const key = this._getLsKey(lsKey)
+    return window.localStorage[key]
   }
 
   /**
@@ -14,7 +41,7 @@ class VueLocalStorage {
    * @returns {*}
    */
   get (lsKey, defaultValue = null) {
-    if (window.localStorage[lsKey]) {
+    if (this._lsGet(lsKey)) {
       let type = String
 
       for (const key in this._properties) {
@@ -24,7 +51,7 @@ class VueLocalStorage {
         }
       }
 
-      return this._process(type, window.localStorage[lsKey])
+      return this._process(type, this._lsGet(lsKey))
     }
 
     return defaultValue !== null ? defaultValue : null
@@ -41,14 +68,14 @@ class VueLocalStorage {
     for (const key in this._properties) {
       const type = this._properties[key].type
 
-      if ((key === lsKey) && [Array, Object].includes(type)) {
-        window.localStorage.setItem(lsKey, JSON.stringify(value))
+      if ((key === lsKey)) {
+        this._lsSet(lsKey, value, type)
 
         return value
       }
     }
 
-    window.localStorage.setItem(lsKey, value)
+    this._lsSet(lsKey, value)
 
     return value
   }
@@ -74,11 +101,8 @@ class VueLocalStorage {
 
     this._properties[key] = { type }
 
-    if (!window.localStorage[key] && defaultValue !== null) {
-      window.localStorage.setItem(
-        key,
-        [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue
-      )
+    if (!this._lsGet(key) && defaultValue !== null) {
+      this._lsSet(key, defaultValue, type)
     }
   }
 
