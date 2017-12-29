@@ -7,18 +7,43 @@ class VueLocalStorage {
     this._namespace = ''
   }
 
+  /**
+   * Namespace getter.
+   *
+   * @returns {string}
+   */
   get namespace () {
     return this._namespace
   }
 
+  /**
+   * Namespace setter.
+   *
+   * @param {string} value
+   */
   set namespace (value) {
-    this._namespace = value ? value + '.' : ''
+    this._namespace = value ? `${value}.` : ''
   }
 
+  /**
+   * Concatenates localStorage key with namespace prefix.
+   *
+   * @param {string} lsKey
+   * @returns {string}
+   * @private
+   */
   _getLsKey (lsKey) {
-    return this._namespace + lsKey
+    return `${this._namespace}${lsKey}`
   }
 
+  /**
+   * Set a value to localStorage giving respect to the namespace.
+   *
+   * @param {string} lsKey
+   * @param {*} rawValue
+   * @param {*} type
+   * @private
+   */
   _lsSet (lsKey, rawValue, type) {
     const key = this._getLsKey(lsKey)
     const value = type && [Array, Object].includes(type)
@@ -28,8 +53,16 @@ class VueLocalStorage {
     window.localStorage.setItem(key, value)
   }
 
+  /**
+   * Get value from localStorage giving respect to the namespace.
+   *
+   * @param {string} lsKey
+   * @returns {any}
+   * @private
+   */
   _lsGet (lsKey) {
     const key = this._getLsKey(lsKey)
+
     return window.localStorage[key]
   }
 
