@@ -1,5 +1,5 @@
 /**
- * vue-local-storage v0.5.0
+ * vue-local-storage v0.6.0
  * (c) 2017 Alexander Avakov
  * @license MIT
  */
@@ -9,6 +9,67 @@ class VueLocalStorage {
    */
   constructor () {
     this._properties = {};
+    this._namespace = '';
+    this._isSupported = true;
+  }
+
+  /**
+   * Namespace getter.
+   *
+   * @returns {string}
+   */
+  get namespace () {
+    return this._namespace
+  }
+
+  /**
+   * Namespace setter.
+   *
+   * @param {string} value
+   */
+  set namespace (value) {
+    this._namespace = value ? `${value}.` : '';
+  }
+
+  /**
+   * Concatenates localStorage key with namespace prefix.
+   *
+   * @param {string} lsKey
+   * @returns {string}
+   * @private
+   */
+  _getLsKey (lsKey) {
+    return `${this._namespace}${lsKey}`
+  }
+
+  /**
+   * Set a value to localStorage giving respect to the namespace.
+   *
+   * @param {string} lsKey
+   * @param {*} rawValue
+   * @param {*} type
+   * @private
+   */
+  _lsSet (lsKey, rawValue, type) {
+    const key = this._getLsKey(lsKey);
+    const value = type && [Array, Object].includes(type)
+      ? JSON.stringify(rawValue)
+      : rawValue;
+
+    window.localStorage.setItem(key, value);
+  }
+
+  /**
+   * Get value from localStorage giving respect to the namespace.
+   *
+   * @param {string} lsKey
+   * @returns {any}
+   * @private
+   */
+  _lsGet (lsKey) {
+    const key = this._getLsKey(lsKey);
+
+    return window.localStorage[key]
   }
 
   /**
@@ -16,11 +77,16 @@ class VueLocalStorage {
    *
    * @param {String} lsKey
    * @param {*} defaultValue
+   * @param {*} defaultType
    * @returns {*}
    */
-  get (lsKey, defaultValue = null) {
-    if (window.localStorage[lsKey]) {
-      let type = String;
+  get (lsKey, defaultValue = null, defaultType = String) {
+    if (!this._isSupported) {
+      return null
+    }
+
+    if (this._lsGet(lsKey)) {
+      let type = defaultType;
 
       for (const key in this._properties) {
         if (key === lsKey) {
@@ -29,7 +95,7 @@ class VueLocalStorage {
         }
       }
 
-      return this._process(type, window.localStorage[lsKey])
+      return this._process(type, this._lsGet(lsKey))
     }
 
     return defaultValue !== null ? defaultValue : null
@@ -43,17 +109,21 @@ class VueLocalStorage {
    * @returns {*}
    */
   set (lsKey, value) {
+    if (!this._isSupported) {
+      return null
+    }
+
     for (const key in this._properties) {
       const type = this._properties[key].type;
 
-      if ((key === lsKey) && [Array, Object].includes(type)) {
-        window.localStorage.setItem(lsKey, JSON.stringify(value));
+      if ((key === lsKey)) {
+        this._lsSet(lsKey, value, type);
 
         return value
       }
     }
 
-    window.localStorage.setItem(lsKey, value);
+    this._lsSet(lsKey, value);
 
     return value
   }
@@ -64,6 +134,10 @@ class VueLocalStorage {
    * @param {String} lsKey
    */
   remove (lsKey) {
+    if (!this._isSupported) {
+      return null
+    }
+
     return window.localStorage.removeItem(lsKey)
   }
 
@@ -79,11 +153,8 @@ class VueLocalStorage {
 
     this._properties[key] = { type };
 
-    if (!window.localStorage[key] && defaultValue !== null) {
-      window.localStorage.setItem(
-        key,
-        [Array, Object].includes(type) ? JSON.stringify(defaultValue) : defaultValue
-      );
+    if (!this._lsGet(key) && defaultValue !== null) {
+      this._lsSet(key, defaultValue, type);
     }
   }
 
@@ -100,7 +171,7 @@ class VueLocalStorage {
       case Boolean:
         return value === 'true'
       case Number:
-        return parseInt(value, 10)
+        return parseFloat(value)
       case Array:
         try {
           const array = JSON.parse(value);
@@ -121,7 +192,7 @@ class VueLocalStorage {
   }
 }
 
-var VueLocalStorage$1 = new VueLocalStorage();
+var vueLocalStorage = new VueLocalStorage();
 
 var index = {
   /**
@@ -141,28 +212,41 @@ var index = {
       return
     }
 
+    let isSupported = true;
+
     try {
       const test = '__vue-localstorage-test__';
 
       window.localStorage.setItem(test, test);
       window.localStorage.removeItem(test);
     } catch (e) {
+      isSupported = false;
+      vueLocalStorage._isSupported = false;
+
       console.error('Local storage is not supported');
     }
 
     const name = options.name || 'localStorage';
     const bind = options.bind;
 
+    if (options.namespace) {
+      vueLocalStorage.namespace = options.namespace;
+    }
+
     Vue.mixin({
       beforeCreate () {
+        if (!isSupported) {
+          return
+        }
+
         if (this.$options[name]) {
           Object.keys(this.$options[name]).forEach((key) => {
             const config = this.$options[name][key];
             const [type, defaultValue] = [config.type, config.default];
 
-            VueLocalStorage$1.addProperty(key, type, defaultValue);
+            vueLocalStorage.addProperty(key, type, defaultValue);
 
-            const existingProp = Object.getOwnPropertyDescriptor(VueLocalStorage$1, key);
+            const existingProp = Object.getOwnPropertyDescriptor(vueLocalStorage, key);
 
             if (!existingProp) {
               const prop = {
@@ -171,8 +255,8 @@ var index = {
                 configurable: true
               };
 
-              Object.defineProperty(VueLocalStorage$1, key, prop);
-              Vue.util.defineReactive(VueLocalStorage$1, key, defaultValue);
+              Object.defineProperty(vueLocalStorage, key, prop);
+              Vue.util.defineReactive(vueLocalStorage, key, defaultValue);
             } else if (!Vue.config.silent) {
               console.log(`${key}: is already defined and will be reused`);
             }
@@ -192,8 +276,8 @@ var index = {
       }
     });
 
-    Vue[name] = VueLocalStorage$1;
-    Vue.prototype[`$${name}`] = VueLocalStorage$1;
+    Vue[name] = vueLocalStorage;
+    Vue.prototype[`$${name}`] = vueLocalStorage;
   }
 };
 
