@@ -8,16 +8,16 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
 ## Install
 
   ``` bash
-  npm install vue-localstorage --save
+  npm install vue-localstorageie11 --save
   ```
   or
   ``` bash
-  bower install vue-localstorage
+  bower install vue-localstorageie11
   ```
 
 ## Usage
   ``` js
-  import VueLocalStorage from 'vue-localstorage'
+  import VueLocalStorage from 'vue-localstorageie11'
 
   Vue.use(VueLocalStorage)
   // Or you can specify any other name and use it via this.$ls, this.$whatEverYouWant
