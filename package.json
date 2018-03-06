@@ -1,10 +1,10 @@
 {
-  "name": "vue-localstorage",
-  "description": "Vue.js localStorage plugin with types support",
+  "name": "vue-localstorageie11",
+  "description": "Vue.js localStorage plugin with types support and IE11 compatible",
   "version": "0.6.1",
   "author": {
-    "name": "Alexander Avakov",
-    "email": "yaavakov@gmail.com"
+    "name": "Michal Fras",
+    "email": "michal.fras@oxm.pl"
   },
   "keywords": [
     "vuejs",
@@ -14,10 +14,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pinguinjkeke/vue-local-storage"
+    "url": "git+https://github.com/frasiek/vue-local-storage"
   },
   "bugs": {
-    "url": "https://github.com/pinguinjkeke/vue-local-storage/issues"
+    "url": "https://github.com/frasiek/vue-local-storage/issues"
   },
   "main": "dist/vue-local-storage.js",
   "files": [
@@ -33,7 +33,7 @@
     "test": "jest"
   },
   "license": "MIT",
-  "homepage": "https://github.com/pinguinjkeke/vue-local-storage#readme",
+  "homepage": "https://github.com/frasiek/vue-local-storage#readme",
   "devDependencies": {
     "babel-jest": "^19.0.0",
     "babel-preset-es2015": "^6.24.1",
