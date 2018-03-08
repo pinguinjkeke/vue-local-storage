@@ -31,7 +31,7 @@ export default {
       const testToken = `__vue-${adapter}-test__`
       window[adapter].setItem(testToken, testToken)
       window[adapter].removeItem(testToken)
-      vueLocalStorage.adapter = adapter
+      vueLocalStorage._adapter = adapter
     } catch (e) {
       isSupported = false
       vueLocalStorage._isSupported = false

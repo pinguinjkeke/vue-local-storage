@@ -6,7 +6,7 @@ class VueLocalStorage {
     this._properties = {}
     this._namespace = ''
     this._isSupported = true
-    this.adapter = 'localStorage' // Can be either localStorage or sessionStorage
+    this._adapter = 'localStorage' // Can be either localStorage or sessionStorage
   }
 
   /**
@@ -14,9 +14,9 @@ class VueLocalStorage {
    */
   get storage () {
     if (this._isSupported) {
-      return window[this.adapter]
+      return window[this._adapter]
     } else {
-      throw new Error(`Storage of type ${this.adapter} is not supported`)
+      throw new Error(`Storage of type ${this._adapter} is not supported`)
     }
   }
 
