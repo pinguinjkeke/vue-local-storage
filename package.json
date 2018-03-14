@@ -1,7 +1,7 @@
 {
   "name": "vue-localstorage",
   "description": "Vue.js localStorage plugin with types support",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "author": {
     "name": "Alexander Avakov",
     "email": "yaavakov@gmail.com"
