@@ -49,22 +49,23 @@ export default {
           Object.keys(this.$options[name]).forEach((key) => {
             const config = this.$options[name][key]
             const [type, defaultValue] = [config.type, config.default]
+            const storageKey = config.key || key
 
-            vueLocalStorage.addProperty(key, type, defaultValue)
+            vueLocalStorage.addProperty(storageKey, type, defaultValue)
 
-            const existingProp = Object.getOwnPropertyDescriptor(vueLocalStorage, key)
+            const existingProp = Object.getOwnPropertyDescriptor(vueLocalStorage, storageKey)
 
             if (!existingProp) {
               const prop = {
-                get: () => Vue.localStorage.get(key, defaultValue),
-                set: val => Vue.localStorage.set(key, val),
+                get: () => Vue.localStorage.get(storageKey, defaultValue),
+                set: val => Vue.localStorage.set(storageKey, val),
                 configurable: true
               }
 
-              Object.defineProperty(vueLocalStorage, key, prop)
-              Vue.util.defineReactive(vueLocalStorage, key, defaultValue)
+              Object.defineProperty(vueLocalStorage, storageKey, prop)
+              Vue.util.defineReactive(vueLocalStorage, storageKey, defaultValue)
             } else if (!Vue.config.silent) {
-              console.log(`${key}: is already defined and will be reused`)
+              console.log(`${storageKey}: is already defined and will be reused`)
             }
 
             if ((bind || config.bind) && config.bind !== false) {
@@ -72,8 +73,8 @@ export default {
 
               if (!this.$options.computed[key]) {
                 this.$options.computed[key] = {
-                  get: () => Vue.localStorage[key],
-                  set: (val) => { Vue.localStorage[key] = val }
+                  get: () => Vue.localStorage[storageKey],
+                  set: (val) => { Vue.localStorage[storageKey] = val }
                 }
               }
             }
