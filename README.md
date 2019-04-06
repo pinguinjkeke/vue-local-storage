@@ -41,6 +41,7 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
   var vm = new Vue({
     localStorage: {
       someObject: {
+        key: 'localStorageKey',
         type: Object,
         default: {
           hello: 'world'
@@ -63,7 +64,7 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
     },
     methods: {
       someMethod () {
-        let lsValue = this.$localStorage.get('someObject')
+        let lsValue = this.$localStorage.get('localStorageKey')
         this.$localStorage.set('someBoolean', true)
         this.$localStorage.remove('stringOne')
       }
