@@ -1,63 +1,36 @@
-/* global jest, afterEach, test, expect  */
+let Vue = require('vue')
+let plugin
+let vueLocalStorage = require('../../src/VueLocalStorage').default
 
-import Vue from 'vue'
+beforeEach(() => {
+  plugin = require('../../src').default
+  jest.resetAllMocks()
+})
 
 afterEach(() => {
   jest.resetModules()
-
-  process.server = false
 })
 
 test('it should pass an error to console if local storage not available', () => {
-  const stubLocalStorage = {
-    setItem: (key, value) => {},
-    removeItem: () => { throw new Exception('Component is not available') }
-  }
-
-  global.localStorage = {}
-  global.console.error = jest.fn()
-
-  let vueLocalStorage = require('../../src').default
-
-  Vue.use(vueLocalStorage)
-
-  jest.resetModules()
-
-  vueLocalStorage = require('../../src').default
-
-  Vue.use(vueLocalStorage)
-
-  expect(console.error.mock.calls.length).toBe(2)
+  Vue.use(plugin)
+  expect(console.error.mock.calls.length).toBe(1)
   expect(console.error.mock.calls[0][0]).toBe('Local storage is not supported')
-  expect(console.error.mock.calls[1][0]).toBe('Local storage is not supported')
 })
 
 test('it adds localStorage object on Vue prototype and instance', () => {
-  require('mock-local-storage')
-
-  const Vue = require('vue')
-  const VueLocalStorage = require('../../src').default
-
-  Vue.use(VueLocalStorage)
-
   const instance = new Vue({
     render: (h) => h('div')
   })
 
-  const vueLocalStorageObject = require('../../src/VueLocalStorage').default
-
-  expect(instance.$localStorage).toBe(vueLocalStorageObject)
-  expect(Vue.prototype.$localStorage).toBe(vueLocalStorageObject)
-  expect(Vue.localStorage).toBe(vueLocalStorageObject)
+  expect(instance.$localStorage).toBe(vueLocalStorage)
+  expect(Vue.prototype.$localStorage).toBe(vueLocalStorage)
+  expect(Vue.localStorage).toBe(vueLocalStorage)
 })
 
 test('it adds all properties from components or Vue instance', () => {
   require('mock-local-storage')
 
-  const Vue = require('vue')
-  const VueLocalStorage = require('../../src').default
-
-  Vue.use(VueLocalStorage)
+  Vue.use(plugin)
 
   const instance = new Vue({
     render: (h) => h('div'),
@@ -75,10 +48,9 @@ test('it adds all properties from components or Vue instance', () => {
 test('It can change default $localStorage binding to any other binding with config', () => {
   require('mock-local-storage')
 
-  const Vue = require('vue')
-  const VueLocalStorage = require('../../src').default
+  vueLocalStorage = require('../../src').default
 
-  Vue.use(VueLocalStorage, {
+  Vue.use(vueLocalStorage, {
     name: 'ls'
   })
 
@@ -105,12 +77,12 @@ test('It wont install when using SSR', () => {
   Vue.use(VueLocalStorage)
 
   expect(Vue.localStorage).toBeUndefined()
+  process.server = false
 })
 
-test('If bind option is true-ish, instances will have computed properties', () => {
+test('If bind option is truthy, instances will have computed properties', () => {
   require('mock-local-storage')
 
-  const Vue = require('vue')
   const VueLocalStorage = require('../../src').default
 
   Vue.use(VueLocalStorage, {
@@ -133,7 +105,6 @@ test('If bind option is true-ish, instances will have computed properties', () =
 test('bound properties hold their values across isntances', () => {
   require('mock-local-storage')
 
-  const Vue = require('vue')
   const VueLocalStorage = require('../../src').default
 
   Vue.use(VueLocalStorage, {
@@ -226,7 +197,6 @@ test('enablement flags for bindings', () => {
 test('It sets namespace property if it\'s specified', () => {
   require('mock-local-storage')
 
-  const Vue = require('vue')
   const VueLocalStorage = require('../../src').default
 
   const namespace = 'testNamespace'
