@@ -24,6 +24,9 @@
     "src",
     "dist/*.js"
   ],
+  "jest": {
+    "setupFiles": ["./jest.setup.js"]
+  },
   "scripts": {
     "build:es": "rollup -c build/rollup.es2015.js",
     "build:main": "rollup -c build/rollup.config.js",
