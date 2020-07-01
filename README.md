@@ -71,4 +71,4 @@ LocalStorage plugin inspired by Vue typed props which take a care of typecasting
   })
   ```
 ## License
-  [MIT]
+[MIT](https://github.com/pinguinjkeke/vue-local-storage/blob/master/LICENSE)
