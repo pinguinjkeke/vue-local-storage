@@ -77,7 +77,7 @@ class VueLocalStorage {
    */
   get (lsKey, defaultValue = null, defaultType = String) {
     if (!this._isSupported) {
-      return null
+      return defaultValue
     }
 
     if (this._lsGet(lsKey)) {
