@@ -133,7 +133,7 @@ class VueLocalStorage {
       return null
     }
 
-    return window.localStorage.removeItem(lsKey)
+    return window.localStorage.removeItem(this._getLsKey(lsKey))
   }
 
   /**
